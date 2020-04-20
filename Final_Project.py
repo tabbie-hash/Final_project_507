@@ -257,7 +257,7 @@ if __name__ == "__main__":
         elif user_input.isalpha():
             if user_input in ['end', 'End', 'END']:
                 sys.exit()
-            elif user_input not in ['exit', 'Exit', 'EXIT']:
+            elif user_input not in ['end', 'End', 'END']:
                 print("Do you wish to end? If yes, then type end.")
             else:
                 print("'!!SYSTEM ERROR!!\nPLEASE TYPE CORRECTLY'")
