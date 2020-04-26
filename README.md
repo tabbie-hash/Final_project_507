@@ -8,14 +8,15 @@ obtained along with other useful files.
 In order to re-run the program, please delete the database and csv file created from the folder and run the program again.
 
 Libraries required:
-from bs4 import BeautifulSoup
-import requests                                                     
-import json
-import pandas as pd
-import csv
-import os
-import sqlite3 as sqlite
-from sqlite3 import Error
-import sqlite3
-import sys
-import plotly.graph_objects as go
+
+from bs4 import BeautifulSoup;
+import requests;                                                     
+import json;
+import pandas as pd;
+import csv;
+import os;
+import sqlite3 as sqlite;
+from sqlite3 import Error;
+import sqlite3;
+import sys;
+import plotly.graph_objects as go;
