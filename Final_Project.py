@@ -1,3 +1,10 @@
+#################################
+##### Name: Tabassum Nisha
+##### Uniqname: tabbie
+#################################
+
+
+
 from bs4 import BeautifulSoup
 import requests                                                     
 # c:\Users\tabas\OneDrive\Desktop\507Lab\Final_project_507
@@ -9,6 +16,7 @@ import sqlite3 as sqlite
 from sqlite3 import Error
 import sqlite3
 import sys
+import plotly.graph_objects as go
 
 
 filename = "NPI_April_data.csv"
@@ -29,7 +37,7 @@ def read_datasource(filename):
     return data_source
 
 
-def fetch_input_list(dataframe, inp_num):
+def fetch_input_list(dataframe,inp):
     '''Takes a python readable dataframe and extracts desired values from the desired column and presents it in a list format.
     
     Parameters
@@ -40,11 +48,17 @@ def fetch_input_list(dataframe, inp_num):
     -------
     list
     '''
+    inp_num = int(inp)
     input_column_intermediate = dataframe.NPI.drop_duplicates().to_frame()
+    npi_deactivated = pd.read_csv("Deactivated_NPI.csv", delimiter=",")
     input_column = input_column_intermediate.NPI[:inp_num]
     npi_list = []
+    waste_list=[]
     for npi in input_column:
-        npi_list.append(npi)
+        if npi not in npi_deactivated['NPI']:
+            npi_list.append(npi)
+        else:
+            waste_list.append(npi)
     return npi_list
 
 
@@ -66,7 +80,8 @@ def collect_data(url, npi_id, cache={}):
         print("Using cache....") 
 
     else:
-        print("Fetching.....")  
+        print("Fetching.....") 
+        url = baseurl+npi_id 
         response = requests.get(url)
         parse = BeautifulSoup(response.text, 'html.parser')
 
@@ -93,7 +108,7 @@ def collect_names(parse):
     physician_name_divs = parse.find('h1', id="page-title")
     for physician_name in physician_name_divs:
         if physician_name[0:6] == 'Search':
-            return "NO PHYSICIAN"
+            return 'No Physician'
         else:
             return physician_name
 
@@ -114,7 +129,7 @@ def collect_details(parse):
     physician_detail_divs = search_div.find_all('div', class_='abim_voc-profile')
 
     if physician_detail_divs == []:
-        return "NO PHYSICIAN DETAILS"
+        return 'No Physician Details'
     else:
         for detail in physician_detail_divs:
             physician_details = detail.text
@@ -215,6 +230,18 @@ def save_cache(cache):
     cache_file.write(contents_to_write)
     cache_file.close()
 
+def data_visual(file_name):
+    vf = read_datasource(file_name)
+    vf['Count'] = vf.apply(lambda row: row.PHYSICIAN_NAME == "No Physician", axis=1)
+    vf_count = vf.Count.value_counts().to_frame()
+
+    xvals = ['No Physician', 'Registered Physician']
+    yvals = vf_count['Count']
+    
+    fig = go.Figure([go.Bar(x=xvals, y=yvals)])
+    fig.update_layout(title_text="Barplot displaying the number of NPI IDs with registered physicians and no physicians")
+    fig.write_html("physician_bar.html", auto_open=True)
+    
 
 
 if __name__ == "__main__":
@@ -227,10 +254,11 @@ if __name__ == "__main__":
                 dbfile = 'physiciandatabase.db'
                 cache = load_cache()
                 dataframe = read_datasource(filename)
-                input_npi_list = fetch_input_list(dataframe, user_input)
+                input_npi_list = fetch_input_list(dataframe,user_input)
                 table_data = []
                 for one_npi in input_npi_list:
-                    cache = collect_data(baseurl,one_npi,cache)
+                    url = baseurl+str(one_npi)
+                    cache = collect_data(url,one_npi,cache)
                     save_cache(cache)
                     
                     phy_name = cache[str(one_npi)][0]
@@ -245,6 +273,8 @@ if __name__ == "__main__":
                 csv_out = 'physiciandatabase.csv'
                 output = read_datasource(csv_out)
                 print(output)
+
+                data_visual(csv_out)
 
                 print("\n*************************************************************************\n")
                 print("YOU MAY ALSO OPEN THE FILE 'physiciandatabase.csv' FROM YOUR DIRECTORY!\nPLEASE ADJUST ROW/COLUMN HEIGHTS AND TEXT ALIGNMENT!\nALSO NOTE THAT THERE IS ALSO A '.db' FILE FOR YOU!\n*-*-*-*THANK YOU*-*-*")
