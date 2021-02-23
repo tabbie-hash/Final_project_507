@@ -1,6 +1,6 @@
 # NPI PHYSICIAN DATABASE PROJECT
 ## Aim: 
-To design a simple interactive program that prompts the user to enter the number of physician's information required. 
+To design a simple interactive program in python that prompts the user to enter the number of physician's information required. 
 
 ## Description:
 The program accepts integer value and doesn't require any API keys or OAuths. Upon entering non-integer values it prompts the user untill the acceptable value is entered. 
