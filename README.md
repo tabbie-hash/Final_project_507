@@ -1,14 +1,14 @@
-# Final_project_507
-The program doesn't require any API keys or OAuths. 
-It's a simple user interactuve program that prompts the user to provide a numerical input to initiate the program to run.
+# NPI PHYSICIAN DATABASE PROJECT
+## Aim: 
+To design a simple interactive program that prompts the user to enter the number of physician's information required. 
 
-Upon running the program successfully and recieving the output table, please check your folder in the respective directory for the table
-obtained along with other useful files. 
+## Description:
+The program accepts integer value and doesn't require any API keys or OAuths. Upon entering non-integer values it prompts the user untill the acceptable value is entered. 
 
-In order to re-run the program, please delete the database and csv file created from the folder and run the program again.
+## Dataset and Libraries:
+The program performs webscraping from (https://www.abim.org/verify-physician.aspx?type=npi&npi=) which is a search box. The search query is initiated upon entering the NPI number from the directory NPI_April_data.csv. 
 
-Libraries required:
-
+Libraries used:
 from bs4 import BeautifulSoup;
 import requests;                                                     
 import json;
@@ -20,3 +20,8 @@ from sqlite3 import Error;
 import sqlite3;
 import sys;
 import plotly.graph_objects as go;
+
+## Usage:
+Upon running the program successfully an output database file is created in the user's directory. 
+
+
