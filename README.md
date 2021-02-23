@@ -6,7 +6,7 @@ To design a simple interactive program that prompts the user to enter the number
 The program accepts integer value and doesn't require any API keys or OAuths. Upon entering non-integer values it prompts the user untill the acceptable value is entered. 
 
 ## Dataset and Libraries:
-The program performs webscraping from (https://www.abim.org/verify-physician.aspx?type=npi&npi=) which is a search box. The search query is initiated upon entering the NPI number from the directory NPI_April_data.csv. 
+The program performs webscraping from https://www.abim.org/verify-physician.aspx?type=npi&npi= which is a search box. The search query is initiated upon entering the NPI number from the directory NPI_April_data.csv. 
 
 Libraries used:
 from bs4 import BeautifulSoup;
